@@ -8,6 +8,5 @@ declare namespace Models {
     isVerified: boolean;
     comparePasswords: (password: string) => Promise<boolean>;
     signAccessToken: () => string;
-    signRefreshToken: () => string;
   }
 }

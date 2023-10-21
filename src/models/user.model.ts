@@ -52,13 +52,6 @@ userSchema.methods.signAccessToken = function () {
   });
 };
 
-// Sign refresh token
-userSchema.methods.signRefreshToken = function () {
-  return jwt.sign({ id: this._id }, config.getRefreshToken(), {
-    expiresIn: "15d",
-  });
-};
-
 // Compare password
 userSchema.methods.comparePasswords = async function (
   enteredPassword: string

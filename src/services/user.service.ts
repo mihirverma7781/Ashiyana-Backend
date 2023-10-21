@@ -33,3 +33,19 @@ export const createUser = async (userData: IUserInput) => {
     throw new ErrorHandler("Service Error: " + error.message, 500);
   }
 };
+
+export const updatePassword = async (email: string, password: string) => {
+  try {
+    const updatedUser = await userModel.findOneAndUpdate(
+      { email: email },
+      { password: password }
+    );
+    if (updatedUser) {
+      return updatedUser;
+    } else {
+      throw new ErrorHandler("Service Error: User not updated", 400);
+    }
+  } catch (error) {
+    throw new ErrorHandler("Service Error: " + error.message, 500);
+  }
+};

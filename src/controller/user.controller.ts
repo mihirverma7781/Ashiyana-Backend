@@ -2,9 +2,14 @@
 
 import { Request, Response, NextFunction } from "express";
 import redis from "../configs/redis.config";
+import bcrypt from "bcryptjs";
 import { v4 as uuid } from "uuid";
 import { CatchAsyncErrors } from "../middlewares/catchAsyncErrors";
-import { checkEmailExists, createUser } from "../services/user.service";
+import {
+  checkEmailExists,
+  createUser,
+  updatePassword,
+} from "../services/user.service";
 import ErrorHandler from "../utils/ErrorHandler.util";
 import sendMail from "../utils/sendMail.util";
 import userModel from "../models/user.model";
@@ -22,11 +27,11 @@ export const verifyMail = CatchAsyncErrors(
         throw new ErrorHandler("Invalid Email Input", 400);
       }
 
-      // check if email already exists
-      const isEmailExist = await checkEmailExists(email);
-      if (isEmailExist) {
-        throw new ErrorHandler("Email already exists", 400);
-      }
+      // check if email already exists : making it common case for forgot password
+      // const isEmailExist = await checkEmailExists(email);
+      // if (isEmailExist) {
+      //   throw new ErrorHandler("Email already exists", 400);
+      // }
 
       const activationCode = Math.floor(1000 + Math.random() * 9000).toString();
       const activationId = uuid().toString();
@@ -116,6 +121,47 @@ export const loginUser = CatchAsyncErrors(
       }
       sendToken(user, 200, response);
     } catch (error) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+export const resetPassword = CatchAsyncErrors(
+  async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const { activationId, email, otp, password } = request.body;
+      if (!activationId || !email || !otp || !password) {
+        throw new ErrorHandler("Invalid Details", 400);
+      }
+      const activationDetails = JSON.parse(await redis.get(activationId));
+      console.log(
+        "🚀 ~ file: user.controller.ts:64 ~ activationDetails:",
+        activationDetails
+      );
+      if (
+        email === activationDetails.email &&
+        parseInt(otp) === parseInt(activationDetails.activationCode)
+      ) {
+        // check if email already exists
+        const isEmailExist = await checkEmailExists(email);
+        if (!isEmailExist) {
+          throw new ErrorHandler("User does not exists", 400);
+        }
+
+        const hasedPassword = await bcrypt.hash(password, 10);
+
+        const userDetails = await updatePassword(email, hasedPassword);
+        if (!userDetails) {
+          throw new ErrorHandler("Password can not be updated", 400);
+        }
+        return response.status(200).json({
+          success: true,
+          message: "Password updated successfully",
+        });
+      } else {
+        throw new ErrorHandler("Invalid OTP or MAIL Details", 400);
+      }
+    } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
   }

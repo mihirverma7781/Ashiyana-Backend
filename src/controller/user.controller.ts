@@ -9,6 +9,7 @@ import {
   checkEmailExists,
   createUser,
   updatePassword,
+  updateUserSettings,
 } from "../services/user.service";
 import ErrorHandler from "../utils/ErrorHandler.util";
 import sendMail from "../utils/sendMail.util";
@@ -162,6 +163,40 @@ export const resetPassword = CatchAsyncErrors(
         throw new ErrorHandler("Invalid OTP or MAIL Details", 400);
       }
     } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+export const updateSettings = CatchAsyncErrors(
+  async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const {
+        fontSize,
+        confidenceHighlightColor,
+        confidenceThreshold,
+        transcriptHighlightColor,
+        textColor,
+      } = request.body;
+      const userEmail = request.currentUser.email;
+
+      const updatedUser = await updateUserSettings(
+        {
+          fontSize,
+          confidenceHighlightColor,
+          confidenceThreshold,
+          transcriptHighlightColor,
+          textColor,
+        },
+        userEmail
+      );
+
+      return response.status(200).json({
+        success: true,
+        message: "Password updated successfully",
+        data: updatedUser,
+      });
+    } catch (error) {
       return next(new ErrorHandler(error.message, 400));
     }
   }

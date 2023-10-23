@@ -32,6 +32,28 @@ const userSchema: Schema<Models.IUser> = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    settings: {
+      fontSize: {
+        type: Number,
+        default: 12,
+      },
+      confidenceThreshold: {
+        type: Number,
+        default: 0.45,
+      },
+      confidenceHighlightColor: {
+        type: String,
+        default: "red",
+      },
+      transcriptHighlightColor: {
+        type: String,
+        default: "gray",
+      },
+      textColor: {
+        type: String,
+        default: "black",
+      },
+    },
   },
   { timestamps: true }
 );

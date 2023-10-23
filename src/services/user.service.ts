@@ -49,3 +49,24 @@ export const updatePassword = async (email: string, password: string) => {
     throw new ErrorHandler("Service Error: " + error.message, 500);
   }
 };
+
+export const updateUserSettings = async (data: any, email: string) => {
+  try {
+    const updatedUser = await userModel.findOneAndUpdate(
+      { email: email },
+      {
+        settings: data,
+      },
+      {
+        new: true,
+      }
+    );
+    if (updatedUser) {
+      return updatedUser;
+    } else {
+      throw new ErrorHandler("Service Error: User settings not updated", 400);
+    }
+  } catch (error) {
+    throw new ErrorHandler("Service Error: " + error.message, 500);
+  }
+};

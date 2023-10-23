@@ -6,8 +6,17 @@ declare namespace Models {
     email: string;
     password: string;
     isVerified: boolean;
+    settings: IUserSettings;
     comparePasswords: (password: string) => Promise<boolean>;
     signAccessToken: () => string;
+  }
+
+  interface IUserSettings  {
+    fontSize: number;
+    confidenceThreshold: number;
+    confidenceHighlightColor: string;
+    transcriptHighlightColor: string;
+    textColor: string;
   }
 
   interface IProject extends Document {

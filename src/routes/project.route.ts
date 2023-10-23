@@ -1,5 +1,5 @@
 import express from "express";
-import { uploadVideo } from "../controller/project.controller";
+import { uploadVideo, userProjects } from "../controller/project.controller";
 import { upload } from "../configs/multer.config";
 import { isAuthenticated } from "../middlewares/auth";
 
@@ -15,5 +15,7 @@ projectRouter.post(
   ]),
   uploadVideo
 );
+
+projectRouter.get("/projects", isAuthenticated, userProjects);
 
 export default projectRouter;

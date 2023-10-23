@@ -10,7 +10,7 @@ export const createProject = async (
   videoName: string,
   userId: string,
   srt: string,
-  rawScripts: string,
+  rawScript: string
 ) => {
   try {
     const createNewProject = await projectModel.create({
@@ -21,13 +21,22 @@ export const createProject = async (
       videoName: videoName,
       userId: userId,
       srt: srt,
-      rawScripts: rawScripts,
+      rawScript: rawScript,
     });
     if (createNewProject) {
       return createNewProject;
     } else {
       throw new ErrorHandler("Service Error: Project Not Created", 400);
     }
+  } catch (error) {
+    throw new ErrorHandler("Service Error: " + error.message, 500);
+  }
+};
+
+export const getAllUserProjects = async (id: string) => {
+  try {
+    const projects = await projectModel.find({ userId: id });
+    return projects;
   } catch (error) {
     throw new ErrorHandler("Service Error: " + error.message, 500);
   }

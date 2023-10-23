@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { CatchAsyncErrors } from "../middlewares/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler.util";
-import { createProject } from "../services/project.service";
+import { createProject, getAllUserProjects } from "../services/project.service";
 
 interface MulterRequest extends Request {
   files?: any;
@@ -39,6 +39,22 @@ export const uploadVideo = CatchAsyncErrors(
         });
       }
     } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+export const userProjects = CatchAsyncErrors(
+  async (request: Request, response: Response, next: NextFunction) => {
+    try {
+      const user = request.currentUser;
+      const projects = await getAllUserProjects(user._id);
+      return response.status(200).json({
+        success: true,
+        message: "Project fetched successfully",
+        data: projects,
+      });
+    } catch (error) {
       return next(new ErrorHandler(error.message, 400));
     }
   }

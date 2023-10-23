@@ -66,6 +66,18 @@ class EnvConfig {
   getRefreshTokenExpiry(): string {
     return this.env.REFRESH_TOKEN_EXPIRE || "1200";
   }
+
+  getAWSAccessKeyId(): string {
+    return this.env.AWS_ACCESS_KEY || "";
+  }
+
+  getAWSSecretAccessKey(): string {
+    return this.env.AWS_SECRET_ACCESS_KEY || "";
+  }
+
+  getS3BucketName(): string {
+    return this.env.AWS_S3_BUCKET_NAME || "";
+  }
 }
 
 export default new EnvConfig();

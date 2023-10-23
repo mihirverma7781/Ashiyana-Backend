@@ -6,10 +6,12 @@ import config from "./configs/environment.config";
 import ErrorMiddleware from "./middlewares/error";
 
 import userRouter from "./routes/user.route";
+import projectRouter from "./routes/project.route";
 // import courseRouter from "./routes/course.route";
 
 //body parser
 app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: false }));
 
 //cookie parser
 app.use(cookieParser());
@@ -23,7 +25,7 @@ app.use(
 
 //routes
 app.use("/api/v1", userRouter);
-// app.use("/api/v1", courseRouter);
+app.use("/api/v1", projectRouter);
 
 //test route
 app.get("/test", (request: Request, response: Response) => {

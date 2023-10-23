@@ -1,4 +1,3 @@
-import AWS from "aws-sdk";
 import { S3Client } from "@aws-sdk/client-s3";
 import config from "./environment.config";
 

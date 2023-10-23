@@ -74,7 +74,7 @@ Before you start using the package, make sure to configure the environment varia
 - `test`: Run tests using `ts-node-test`.
 - `build`: Build the project using TypeScript.
 
-To execute a script, use the following command: `npm run <script-name>`.
+To execute a script, use the following command: `pnpm run <script-name>`.
 
 ---
 

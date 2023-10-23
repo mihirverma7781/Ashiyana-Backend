@@ -1,14 +1,16 @@
 {
   "name": "transcript-apis",
   "version": "1.0.0",
-  "description": "",
+  "description": "Transcript Backend API",
   "main": "src/index.ts",
   "scripts": {
     "start": "ts-node-dev src/index.ts",
-    "dev": "ts-node-dev --respawn src/index.ts"
+    "dev": "ts-node-dev --respawn src/index.ts",
+    "test": "ts-node-test src/index.ts",
+    "build": "tsc"
   },
   "keywords": [],
-  "author": "",
+  "author": "Mihir Verma",
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.433.0",

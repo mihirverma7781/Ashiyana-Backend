@@ -78,7 +78,7 @@ To execute a script, use the following command: `pnpm run <script-name>`.
 
 ---
 
-## Dependencies
+## Dependencies (I am using pnpm as package manager)
 
 This package relies on several dependencies to function correctly. Here are the key dependencies used in **Transcript APIs**:
 

@@ -1,11 +1,10 @@
 import mongoose, { Model, Schema } from "mongoose";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import config from "../configs/environment.config";
 import { Models } from "../@types/model";
 
 const emailRegexPattern: RegExp =
   /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+const mobileRegexPattern: RegExp = /^[6-9]{1}[0-9]{9}$/;
 
 const userSchema: Schema<Models.IUser> = new mongoose.Schema(
   {
@@ -24,62 +23,19 @@ const userSchema: Schema<Models.IUser> = new mongoose.Schema(
       },
       unique: true,
     },
-    password: {
+    phone: {
       type: String,
-      minlength: [6, "Password must be atleast 6 characters"],
-    },
-    isVerified: {
-      type: Boolean,
-      default: false,
-    },
-    settings: {
-      fontSize: {
-        type: Number,
-        default: 12,
-      },
-      confidenceThreshold: {
-        type: Number,
-        default: 0.45,
-      },
-      confidenceHighlightColor: {
-        type: String,
-        default: "red",
-      },
-      transcriptHighlightColor: {
-        type: String,
-        default: "gray",
-      },
-      textColor: {
-        type: String,
-        default: "black",
+      required: [true, "Please enter a Phone Number"],
+      validate: {
+        validator: function (value: string) {
+          return mobileRegexPattern.test(value);
+        },
+        message: "please enter a valid number",
       },
     },
   },
   { timestamps: true }
 );
-
-// Hash password
-userSchema.pre<Models.IUser>("save", async function (next) {
-  if (!this.isModified("password")) {
-    next();
-  }
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
-});
-
-// Sign access token
-userSchema.methods.signAccessToken = function () {
-  return jwt.sign({ id: this._id }, config.getAccessToken(), {
-    expiresIn: "2d",
-  });
-};
-
-// Compare password
-userSchema.methods.comparePasswords = async function (
-  enteredPassword: string
-): Promise<boolean> {
-  return await bcrypt.compare(enteredPassword, this.password);
-};
 
 const userModel: Model<Models.IUser> = mongoose.model("User", userSchema);
 

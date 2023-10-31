@@ -3,25 +3,35 @@ import ErrorHandler from "../utils/ErrorHandler.util";
 import projectModel from "../models/project.model";
 
 export const createProject = async (
-  title: string,
-  language: string,
-  source: string,
-  videoUrl: string,
-  videoName: string,
-  userId: string,
-  srt: string,
-  rawScript: string
+  name,
+  status,
+  description,
+  location,
+  projectIRR,
+  minInvestment,
+  tenure,
+  monthlyAvg,
+  area,
+  overview,
+  distance,
+  aminities,
+  faq
 ) => {
   try {
     const createNewProject = await projectModel.create({
-      title: title,
-      language: language,
-      source: source,
-      video: videoUrl,
-      videoName: videoName,
-      userId: userId,
-      srt: srt,
-      rawScript: rawScript,
+      name,
+      status,
+      description,
+      location,
+      projectIRR,
+      minInvestment,
+      tenure,
+      monthlyAvg,
+      area,
+      overview,
+      distance,
+      aminities,
+      faq,
     });
     if (createNewProject) {
       return createNewProject;
@@ -33,9 +43,9 @@ export const createProject = async (
   }
 };
 
-export const getAllUserProjects = async (id: string) => {
+export const getAllUserProjects = async () => {
   try {
-    const projects = await projectModel.find({ userId: id });
+    const projects = await projectModel.find();
     return projects;
   } catch (error) {
     throw new ErrorHandler("Service Error: " + error.message, 500);

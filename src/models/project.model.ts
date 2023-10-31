@@ -1,44 +1,61 @@
 import mongoose, { Model, Schema } from "mongoose";
 import { Models } from "../@types/model";
 
+const faqSchema = new mongoose.Schema({
+  question: {
+    type: String,
+  },
+  answer: {
+    type: String,
+  },
+});
+
 const projectSchema: Schema<Models.IProject> = new mongoose.Schema(
   {
-    title: {
+    name: {
       type: String,
-      required: [true, "Please enter a title"],
+      required: [true, "Please enter a name"],
     },
-    language: {
+    status: {
       type: String,
-      required: [true, "Please enter a language"],
+      required: [true, "Please enter a status"],
     },
-    source: {
+    description: {
       type: String,
-      required: [true, "Please enter a source"],
+      required: [true, "Please enter a description"],
     },
-    video: {
+    location: {
       type: String,
-      required: [true, "Not a valid video url"],
+      required: [true, "Not a valid location"],
     },
-    videoName: {
-      type: String,
-      required: [true, "Not a valid video name"],
-    },
-    srt: {
+    projectIRR: {
       type: String,
     },
-    rawScript: {
+    minInvestment: {
       type: String,
     },
-    userId: {
+    tenure: {
       type: String,
-      required: [true, "Invalid user"],
-    }
+    },
+    monthlyAvg: {
+      type: String,
+    },
+    area: {
+      type: String,
+    },
+    overview: {
+      type: [String],
+    },
+    distance: {
+      type: [String],
+    },
+    aminities: {
+      type: [String],
+    },
+    faq: [faqSchema],
   },
   { timestamps: true }
 );
-
-// Create a compound unique index on userId and title
-projectSchema.index({ userId: 1, title: 1 }, { unique: true });
 
 const projectModel: Model<Models.IProject> = mongoose.model(
   "Project",

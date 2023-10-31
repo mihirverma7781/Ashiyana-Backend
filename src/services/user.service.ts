@@ -4,22 +4,9 @@ import userModel from "../models/user.model";
 
 interface IUserInput {
   email: string;
-  password: string;
+  phone: string;
   name: string;
 }
-
-export const checkEmailExists = async (email: string): Promise<boolean> => {
-  try {
-    const isEmailExist = await userModel.findOne({ email: email });
-    if (isEmailExist) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (error) {
-    throw new ErrorHandler("Service error: " + error.message, 500);
-  }
-};
 
 export const createUser = async (userData: IUserInput) => {
   try {
@@ -28,43 +15,6 @@ export const createUser = async (userData: IUserInput) => {
       return createUser;
     } else {
       throw new ErrorHandler("Service Error: User not created", 400);
-    }
-  } catch (error) {
-    throw new ErrorHandler("Service Error: " + error.message, 500);
-  }
-};
-
-export const updatePassword = async (email: string, password: string) => {
-  try {
-    const updatedUser = await userModel.findOneAndUpdate(
-      { email: email },
-      { password: password }
-    );
-    if (updatedUser) {
-      return updatedUser;
-    } else {
-      throw new ErrorHandler("Service Error: User not updated", 400);
-    }
-  } catch (error) {
-    throw new ErrorHandler("Service Error: " + error.message, 500);
-  }
-};
-
-export const updateUserSettings = async (data: any, email: string) => {
-  try {
-    const updatedUser = await userModel.findOneAndUpdate(
-      { email: email },
-      {
-        settings: data,
-      },
-      {
-        new: true,
-      }
-    );
-    if (updatedUser) {
-      return updatedUser;
-    } else {
-      throw new ErrorHandler("Service Error: User settings not updated", 400);
     }
   } catch (error) {
     throw new ErrorHandler("Service Error: " + error.message, 500);

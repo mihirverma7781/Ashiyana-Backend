@@ -4,29 +4,34 @@ declare namespace Models {
   interface IUser extends Document {
     name: string;
     email: string;
-    password: string;
-    isVerified: boolean;
-    settings: IUserSettings;
-    comparePasswords: (password: string) => Promise<boolean>;
-    signAccessToken: () => string;
+    phone: string;
   }
 
-  interface IUserSettings  {
-    fontSize: number;
-    confidenceThreshold: number;
-    confidenceHighlightColor: string;
-    transcriptHighlightColor: string;
-    textColor: string;
+  interface IAdmin {
+    email: string;
+    password: string;
+  }
+
+  interface IFaq {
+    question: string;
+    answer: string;
   }
 
   interface IProject extends Document {
-    title: string;
-    language: string;
-    source: string;
-    video: string;
-    videoName: string;
-    srt: string;
-    rawScript: string;
-    userId: string;
+    name: string;
+    status: string;
+    description: string;
+    location: string;
+    minInvestment: string;
+    tenure: string;
+    projectIRR: string;
+    monthlyAvg: string;
+    area: string;
+    overview: string[];
+    distance: string[];
+    aminities: string[];
+    faq: IFaq[];
   }
 }
+
+// name, status, description, location, projectIRR, minInvestment,tenure, monthlyAvg, area, overview, distance, aminities, faq

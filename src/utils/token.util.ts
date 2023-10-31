@@ -2,7 +2,7 @@
 import { Response } from "express";
 import config from "../configs/environment.config";
 import Util from "../@types/util";
-import redis from "../configs/redis.config";
+import jwt from "jsonwebtoken";
 import { Models } from "../@types/model";
 
 // parse env variables to integrate with fallback values
@@ -17,12 +17,11 @@ export const accessTokenOptions: Util.ITokenOptions = {
 };
 
 const sendToken = async (
-  user: Models.IUser,
+  user: Models.IAdmin,
   statusCode: number,
   response: Response
 ) => {
-  user.password = null;
-  const accessToken = user.signAccessToken();
+  const accessToken = jwt.sign({ email: user.email }, config.getAccessToken());
 
   //only set secure to true in production environment
   if (config.getNodeEnv() === "production") {
@@ -33,7 +32,6 @@ const sendToken = async (
 
   return response.status(statusCode).json({
     success: true,
-    user,
     accessToken,
   });
 };

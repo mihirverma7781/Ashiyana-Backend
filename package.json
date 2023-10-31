@@ -1,7 +1,7 @@
 {
-  "name": "transcript-apis",
+  "name": "ashiyana-apis",
   "version": "1.0.0",
-  "description": "Transcript Backend API",
+  "description": "ashiyana Backend API",
   "main": "src/index.ts",
   "scripts": {
     "start": "ts-node-dev src/index.ts",

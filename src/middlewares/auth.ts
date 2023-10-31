@@ -5,8 +5,7 @@ import { CatchAsyncErrors } from "./catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler.util";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../configs/environment.config";
-import userModel from "../models/user.model";
- 
+
 export const isAuthenticated = CatchAsyncErrors(
   async (request: Request, response: Response, next: NextFunction) => {
     const accessToken = request.cookies.access_token;
@@ -24,13 +23,13 @@ export const isAuthenticated = CatchAsyncErrors(
       return next(new ErrorHandler("Access token is not valid", 400));
     }
 
-    const user = await userModel.findById(decoded.id);
+    const adminEmail = "admin@ashiyana.com";
 
-    if (!user) {
-      next(new ErrorHandler("user not found", 400));
+    if (decoded.email === adminEmail) {
+      request.currentUser = true;
+      next();
+    } else {
+      next(new ErrorHandler("admin not found", 400));
     }
-    request.currentUser = user;
-
-    next();
   }
 );
